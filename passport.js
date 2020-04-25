@@ -3,19 +3,17 @@ const LocalStrategy = require("passport-local").Strategy,
 
 module.exports = new LocalStrategy((username, password, done) => {
   User.findOne({ username })
-    .then(user => {
+    .then((user) => {
       if (!user) {
         return done(null, false);
       }
-      user.validPassword(password, user.password).then(isValid => {
+      user.validPassword(password, user.password).then((isValid) => {
         if (isValid) {
-          done(null, user);
+          return done(null, user);
         } else {
           return done(null, false);
         }
       });
-
-      return done(null, user);
     })
     .catch(done);
 });
