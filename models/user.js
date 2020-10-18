@@ -5,35 +5,42 @@ const userSchema = new mongoose.Schema({
   username: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   email: {
     type: String,
-    required: true
+    required: true,
+    unique: true,
   },
   extensions: [String],
   extensionData: {
     pomodoros: [
       {
         type: mongoose.SchemaTypes.ObjectId,
-        ref: "pomodoro"
-      }
+        ref: "pomodoro",
+      },
     ],
     boards: [
       {
         type: mongoose.SchemaTypes.ObjectId,
-        ref: "board"
-      }
-    ]
-  }
+        ref: "board",
+      },
+    ],
+  },
+  passwordResetToken: {
+    type: String,
+  },
+  passwordResetTokenValidUntil: {
+    type: Date,
+  },
 });
 
 // encode the password before saving
-userSchema.pre("save", async function(next) {
+userSchema.pre("save", async function (next) {
   const user = this;
   user.password = await bcrypt.hash(user.password, 10);
   next();
@@ -42,7 +49,7 @@ userSchema.pre("save", async function(next) {
 // check if the password the user gave us matches the
 // user's password from the database
 userSchema.methods.validPassword = (localPassword, userPassword) =>
-  bcrypt.compare(localPassword, userPassword).then(res => res);
+  bcrypt.compare(localPassword, userPassword).then((res) => res);
 
 const User = mongoose.model("user", userSchema);
 
