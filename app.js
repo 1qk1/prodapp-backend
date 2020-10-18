@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express"),
   app = express(),
   helmet = require("helmet"),
@@ -10,8 +11,6 @@ const express = require("express"),
   cors = require("cors"),
   errorMiddleware = require("./middleware/error").errorMiddleware,
   authStrategy = require("./passport");
-
-require("dotenv").config();
 
 mongoose.connect(
   process.env.MONGODB_URI,

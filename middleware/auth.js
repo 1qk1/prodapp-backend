@@ -44,7 +44,7 @@ const verifyPassword = (req, res, next) => {
     const userData = {
       username,
       id: _id,
-      extensions
+      extensions,
     };
     // pass the user in req.user
     req.user = userData;
@@ -57,15 +57,21 @@ const verifyPassword = (req, res, next) => {
 const registerValidations = [
   body("email", "Please enter a valid e-mail address.").isEmail(),
   body("username", "Username should be more than 3 characters long.").isLength({
-    min: 3
+    min: 3,
   }),
   body("password", "Password should be more than 5 characters long.").isLength({
-    min: 5
-  })
+    min: 5,
+  }),
+];
+const passwordValidations = [
+  body("password", "Password should be more than 5 characters long.").isLength({
+    min: 5,
+  }),
 ];
 
 module.exports = {
   verifyToken,
   verifyPassword,
-  registerValidations
+  registerValidations,
+  passwordValidations,
 };
