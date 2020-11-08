@@ -5,8 +5,6 @@
   "scripts": {
     "start": "node app.js",
     "start:dev": "nodemon app.js",
-    "snyk-protect": "snyk protect",
-    "prepare": "npm run snyk-protect"
   },
   "author": "",
   "dependencies": {
