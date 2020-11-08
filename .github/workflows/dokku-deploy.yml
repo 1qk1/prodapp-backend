@@ -36,5 +36,5 @@ jobs:
         uses: idoberko2/dokku-deploy-github-action@v1
         with:
             ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-            dokku-host: api.prodapp.xyz'
+            dokku-host: 'api.prodapp.xyz'
             app-name: 'prodapp-backend'
