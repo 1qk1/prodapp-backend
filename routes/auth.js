@@ -2,7 +2,7 @@ const router = require("express").Router(),
   authHandlers = require("../handlers/auth"),
   verifyPassword = require("../middleware/auth").verifyPassword,
   verifyToken = require("../middleware/auth").verifyToken,
-  { registerValidations, passwordValidations } = require("../middleware/auth");
+  { registerValidations, passwordValidations, resetPasswordValidations } = require("../middleware/auth");
 
 router.post("/register", registerValidations, authHandlers.registerHandler);
 
@@ -25,7 +25,7 @@ router.get(
 );
 router.post(
   "/reset-password/:passwordResetToken",
-  passwordValidations,
+  resetPasswordValidations,
   authHandlers.resetPassword
 );
 

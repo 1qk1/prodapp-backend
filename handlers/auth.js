@@ -95,7 +95,7 @@ const forgotPassword = (req, res) => {
               "Hello,",
               "This email is sent because you requested a password change",
               "To change your password follow this link",
-              "https://prodapp.xyz/reset/" + token,
+              "https://prodapp.xyz/reset-password/" + token,
               "Keep in mind this link is valid for 20 minutes, after that you will need to request a new recovery again",
             ],
           };
@@ -110,7 +110,8 @@ const forgotPassword = (req, res) => {
 
 const checkPasswordResetToken = (req, res) => {
   const { passwordResetToken } = req.params;
-  User.findOne({ passwordResetToken: passwordResetToken })
+  const cutoff = moment().add(20, 'minutes');
+  User.findOne({ passwordResetToken: passwordResetToken }, {$lt: cutoff })
     .then((user) => {
       if (!user) {
         throw new CustomError(400, "Token expired");
@@ -125,17 +126,9 @@ const resetPassword = (req, res) => {
   const errors = validationResult(req).array();
   if (errors.length > 0) return res.handleError(new CustomError(400, errors));
 
-  const { email, password: newPassword } = req.body;
+  const { password: newPassword } = req.body;
   const { passwordResetToken } = req.params;
-  // will get user by email and passwordResetToken
-  User.findOne({
-    $and: [
-      // get the card that matches the id in the parameter
-      { email: email },
-      // and is owned by the logged in user
-      { passwordResetToken: passwordResetToken },
-    ],
-  })
+  User.findOne({ passwordResetToken: passwordResetToken })
     .then((user) => {
       if (moment().isAfter(moment(user.passwordResetTokenValidUntil))) {
         throw new CustomError(400, "Token expired");
@@ -149,9 +142,6 @@ const resetPassword = (req, res) => {
       }
     })
     .catch(res.handleError);
-  // will check if passwordResetToken is valid (passwordResetTokenValid)
-  // will input a new password to the user's profile
-  // will return success or fail
 };
 
 module.exports = {

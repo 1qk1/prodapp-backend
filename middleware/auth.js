@@ -68,10 +68,26 @@ const passwordValidations = [
     min: 5,
   }),
 ];
+// req.checkBody('email_confirm', 'mail does not match').equals(req.body.email);
+
+const resetPasswordValidations = [
+  body("password", "Password should be more than 5 characters long.").isLength({
+    min: 5,
+  }),
+  body("password", "Passwords don't match.").custom((value,{req, loc, path}) => {
+    if (value !== req.body.confirmPassword) {
+        // trow error if passwords do not match
+        throw new Error("Passwords don't match XDDD.");
+    } else {
+        return value;
+    }
+  }),
+];
 
 module.exports = {
   verifyToken,
   verifyPassword,
   registerValidations,
   passwordValidations,
+  resetPasswordValidations,
 };
