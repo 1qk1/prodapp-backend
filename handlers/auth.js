@@ -3,7 +3,7 @@ const jwt = require("jsonwebtoken"),
   CustomError = require("../middleware/error").CustomError,
   { validationResult } = require("express-validator"),
   crypto = require("crypto"),
-  moment = require("moment"),
+  dayjs = require("dayjs"),
   mailgun = require("mailgun-js")({
     apiKey: process.env.MAILGUN_API_KEY,
     domain: process.env.MAILGUN_DOMAIN,
@@ -79,7 +79,7 @@ const forgotPassword = (req, res) => {
       // will create a user reset token based on inputted email
       crypto.randomBytes(16, function (err, buffer) {
         const token = buffer.toString("hex");
-        const expirationTime = moment().add(20, "m").toDate();
+        const expirationTime = dayjs().add(20, 'minutes').toISOString();
         // will enter the reset token on the user's profile
         // along with a expiration time of 20 minutes
         user.passwordResetToken = token;
@@ -110,7 +110,7 @@ const forgotPassword = (req, res) => {
 
 const checkPasswordResetToken = (req, res) => {
   const { passwordResetToken } = req.params;
-  const cutoff = moment().add(20, 'minutes');
+  const cutoff = dayjs().add(20, 'minutes').toISOString();
   User.findOne({ passwordResetToken: passwordResetToken }, {$lt: cutoff })
     .then((user) => {
       if (!user) {
@@ -130,7 +130,7 @@ const resetPassword = (req, res) => {
   const { passwordResetToken } = req.params;
   User.findOne({ passwordResetToken: passwordResetToken })
     .then((user) => {
-      if (moment().isAfter(moment(user.passwordResetTokenValidUntil))) {
+      if (dayjs().isAfter(dayjs(user.passwordResetTokenValidUntil))) {
         throw new CustomError(400, "Token expired");
       } else {
         user.password = newPassword;
