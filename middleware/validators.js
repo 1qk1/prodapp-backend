@@ -32,6 +32,7 @@ const changeListTitle = [
 ];
 const cardText = [
   body("text")
+    .optional()
     .trim()
     .not()
     .isEmpty()

@@ -5,6 +5,8 @@ const router = require("express").Router(),
 
 router.use(verifyToken);
 
+router.get("/:cardId", validationCheck, boardCardHandlers.getCardHandler);
+
 router.post("/", cardText, validationCheck, boardCardHandlers.newCardHandler);
 
 router.put("/", cardText, validationCheck, boardCardHandlers.editCardHandler);

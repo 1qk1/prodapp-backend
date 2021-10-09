@@ -6,19 +6,19 @@ const getAllPomodoros = (req, res) => {
   const userId = req.user.id;
   // find all pomodoros for that user
   Pomodoro.find({ userId })
-    .then(pomodoros => {
+    .then((pomodoros) => {
       // else send back all the user's pomodoros
       res.json(pomodoros);
     })
-    .catch(error => res.handleError(error));
+    .catch((error) => res.handleError(error));
 };
 
 const newPomodoro = (req, res) => {
   // get the user's id
   const userId = req.user.id;
   // create a new pomodoro for the user
-  Pomodoro.create({ userId })
-    .then(newPomodoro => {
+  Pomodoro.create({ userId, date: new Date() })
+    .then((newPomodoro) => {
       // get the logged in user
       User.findByIdAndUpdate(
         userId,
@@ -31,12 +31,12 @@ const newPomodoro = (req, res) => {
           //  send back the new pomodoro
           res.json({ newPomodoro });
         })
-        .catch(error => res.handleError(error));
+        .catch((error) => res.handleError(error));
     })
-    .catch(error => res.handleError(error));
+    .catch((error) => res.handleError(error));
 };
 
 module.exports = {
   getAllPomodoros,
-  newPomodoro
+  newPomodoro,
 };
