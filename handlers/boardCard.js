@@ -2,13 +2,28 @@ const Board = require("../models/board"),
   BoardCard = require("../models/boardCard"),
   { ObjectId } = require("mongoose").Types;
 
+const getCardHandler = (req, res) => {
+  BoardCard.findOne({
+    $and: [
+      // get the card that matches the id in the parameter
+      { _id: req.params.cardId },
+      // and is owned by the logged in user
+      { owner: req.user.id }
+    ]
+  }).then(card => {
+    res.json({ card })
+  }).catch(res.handleError);
+
+}
+
 const newCardHandler = (req, res) => {
   // deconstruct the data we need to make a card
   const { text, listId, boardId } = req.body;
   // create the card data
   const cardData = {
     text,
-    owner: req.user.id
+    owner: req.user.id,
+    listId: listId
   };
   // create card
   BoardCard.create(cardData)
@@ -33,7 +48,21 @@ const newCardHandler = (req, res) => {
 };
 
 const editCardHandler = (req, res) => {
-  const { text } = req.body;
+  // filter properties to change
+  const cardFields = Object.keys(BoardCard.schema.paths)
+  delete cardFields._id
+  delete cardFields.__v
+
+  const propsToChange = Object.keys(req.body).reduce((sum, val) => {
+    if (cardFields.includes(val)) {
+      return {
+        ...sum,
+        [val]: req.body[val]
+      }
+    }
+    return sum
+  }, {});
+
   // find by id and update
   BoardCard.findOneAndUpdate(
     {
@@ -45,7 +74,7 @@ const editCardHandler = (req, res) => {
       ]
     },
     // properties to change
-    { $set: { text } },
+    { $set: propsToChange },
     // don't use deprecated function
     { useFindAndModify: false, new: true }
   )
@@ -55,7 +84,7 @@ const editCardHandler = (req, res) => {
       // updated in the database
       // send it back to the user
       res.json({
-        updatedCard: { _id: updatedCard._id, text: updatedCard.text }
+        updatedCard: { _id: updatedCard._id, ...propsToChange }
       });
     })
     .catch(res.handleError);
@@ -131,6 +160,7 @@ const deleteCardHandler = (req, res) => {
 };
 
 module.exports = {
+  getCardHandler,
   newCardHandler,
   editCardHandler,
   deleteCardHandler,
