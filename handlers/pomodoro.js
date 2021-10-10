@@ -25,7 +25,6 @@ const newPomodoro = (req, res) => {
         // push the new pomodoro in the array of
         // pomodoros in the user's account
         { $push: { pomodoros: newPomodoro } },
-        { useFindAndModify: false }
       )
         .then(() => {
           //  send back the new pomodoro
