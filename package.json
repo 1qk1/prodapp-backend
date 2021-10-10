@@ -8,19 +8,18 @@
   },
   "author": "",
   "dependencies": {
-    "bcrypt": "^5.0.0",
+    "bcrypt": "^5.0.1",
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
-    "dayjs": "^1.9.8",
-    "dotenv": "^8.2.0",
+    "dayjs": "^1.10.7",
+    "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "express-validator": "^6.9.0",
-    "helmet": "^4.3.1",
+    "express-validator": "^6.12.2",
+    "helmet": "^4.6.0",
     "jsonwebtoken": "^8.5.1",
     "mailgun-js": "^0.22.0",
-    "mongoose": "^5.13.9",
-    "npm-check-updates": "^10.2.5",
-    "passport": "^0.4.1",
+    "mongoose": "^6.0.10",
+    "passport": "^0.5.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0"
   },
@@ -28,6 +27,6 @@
     "node": "12"
   },
   "devDependencies": {
-    "nodemon": "^2.0.6"
+    "nodemon": "^2.0.13"
   }
 }
