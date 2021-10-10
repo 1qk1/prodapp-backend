@@ -21,7 +21,7 @@ const newListHandler = (req, res) => {
       ]
     },
     { $push: { lists: newList } },
-    { useFindAndModify: false, new: true }
+    { new: true }
   )
     .then(newBoard => {
       // send the list back to the user
@@ -46,7 +46,6 @@ const changeListTitle = (req, res) => {
     { $set: { "lists.$[list].title": req.body.newTitle } },
     {
       // don't use deprecated function
-      useFindAndModify: false,
       new: true,
       arrayFilters: [{ "list._id": ObjectId(req.body.listId) }]
     }

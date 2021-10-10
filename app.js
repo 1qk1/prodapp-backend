@@ -14,7 +14,6 @@ const express = require("express"),
 
 mongoose.connect(
   process.env.MONGODB_URI,
-  { useNewUrlParser: true, useUnifiedTopology: true },
   (error) => {
     if (!error) {
       console.log("database connected");
@@ -23,7 +22,6 @@ mongoose.connect(
     }
   }
 );
-mongoose.set("useCreateIndex", true);
 
 app.use(helmet());
 

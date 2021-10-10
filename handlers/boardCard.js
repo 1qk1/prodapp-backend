@@ -34,7 +34,6 @@ const newCardHandler = (req, res) => {
         // push the new card in the list's array of cards
         { $push: { "lists.$[listId].cards": newCard } },
         {
-          useFindAndModify: false,
           arrayFilters: [{ "listId._id": ObjectId(listId) }]
         }
       )
@@ -76,7 +75,7 @@ const editCardHandler = (req, res) => {
     // properties to change
     { $set: propsToChange },
     // don't use deprecated function
-    { useFindAndModify: false, new: true }
+    { new: true }
   )
     .then(updatedCard => {
       // update the object to send it back to the user
@@ -100,7 +99,6 @@ const moveCardHandler = (req, res) => {
       $pull: { "lists.$[list].cards": ObjectId(cardId) }
     },
     {
-      useFindAndModify: false,
       arrayFilters: [{ "list._id": ObjectId(fromList) }]
     }
   ).exec();
@@ -116,7 +114,6 @@ const moveCardHandler = (req, res) => {
       }
     },
     {
-      useFindAndModify: false,
       arrayFilters: [{ "list._id": ObjectId(toList) }]
     }
   ).exec();
@@ -143,7 +140,6 @@ const deleteCardHandler = (req, res) => {
       $pull: { "lists.$[list].cards": ObjectId(cardId) }
     },
     {
-      useFindAndModify: false,
       arrayFilters: [{ "list._id": ObjectId(listId) }]
     }
   )

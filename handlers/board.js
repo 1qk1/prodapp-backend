@@ -70,7 +70,6 @@ const newBoardHandler = (req, res) => {
             }
           }
         },
-        { useFindAndModify: false }
       )
         .then(() => {
           // send the board back to the user
@@ -105,7 +104,7 @@ const editBoardHandler = (req, res) => {
       }
     },
     // don't use deprecated function, return updated board
-    { useFindAndModify: false, new: true }
+    { new: true }
   )
     .lean()
     .then(updatedBoard => {
@@ -150,7 +149,6 @@ const deleteBoardHandler = (req, res) => {
       const userPromise = User.findByIdAndUpdate(
         req.user.id,
         { $pull: { "extensionData.boards": boardId } },
-        { useFindAndModify: false }
       ).exec();
       Promise.all([cardsDeletePromise, boardDeletePromise, userPromise])
         .then(() => {

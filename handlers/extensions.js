@@ -6,7 +6,6 @@ const addExtension = (req, res) => {
   User.findByIdAndUpdate(
     req.user.id,
     { $addToSet: { extensions: extension } },
-    { useFindAndModify: false }
   )
     .then(() => {
       res.sendStatus(200);
@@ -20,7 +19,6 @@ const removeExtension = (req, res) => {
   User.findByIdAndUpdate(
     req.user.id,
     { $pull: { extensions: extension } },
-    { useFindAndModify: false }
   )
     .then(() => {
       res.sendStatus(200);
