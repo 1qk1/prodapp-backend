@@ -51,12 +51,22 @@ const registerHandler = (req, res) => {
 
   const user = req.body;
   // check if user exists
-  User.findOne({ username: user.username })
+  User.findOne({
+    $or: [
+      { username: user.username },
+      { email: user.email },
+    ]
+  })
     .then((foundUser) => {
       // if there is already a user with that username,
       // send an error and message
-      if (foundUser !== null)
-        throw new CustomError(400, "User already exists.");
+      if (foundUser !== null) {
+        if (foundUser.email === user.email) {
+          throw new CustomError(400, "Email already exists.");
+        } else {
+          throw new CustomError(400, "User already exists.");
+        }
+      }
       // create user
       User.create(user)
         .then((newUser) => {
@@ -111,7 +121,7 @@ const forgotPassword = (req, res) => {
 const checkPasswordResetToken = (req, res) => {
   const { passwordResetToken } = req.params;
   const cutoff = dayjs().add(20, 'minutes').toISOString();
-  User.findOne({ passwordResetToken: passwordResetToken }, {$lt: cutoff })
+  User.findOne({ passwordResetToken: passwordResetToken }, { $lt: cutoff })
     .then((user) => {
       if (!user) {
         throw new CustomError(400, "Token expired");
