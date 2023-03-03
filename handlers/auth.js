@@ -110,12 +110,13 @@ const forgotPassword = (req, res) => {
             ],
           };
           mailgun.messages().send(emailData, function (error, body) {
-            res.json({ success: true });
+            return res.json({ success: true });
           });
         });
       });
     }
-  });
+    throw new CustomError(400, "Email not found");
+  }).catch(res.handleError);
 };
 
 const checkPasswordResetToken = (req, res) => {
