@@ -83,7 +83,7 @@ const deleteListHandler = (req, res) => {
           res.handleError
         );
       }
-      board.lists.id(listId).remove();
+      board.lists.id(listId).deleteOne();
       board.save().then(() => {
         res.sendStatus(200);
       });

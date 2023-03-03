@@ -34,7 +34,7 @@ const newCardHandler = (req, res) => {
         // push the new card in the list's array of cards
         { $push: { "lists.$[listId].cards": newCard } },
         {
-          arrayFilters: [{ "listId._id": ObjectId(listId) }]
+          arrayFilters: [{ "listId._id": new ObjectId(listId) }]
         }
       )
         .then(() => {
@@ -96,10 +96,10 @@ const moveCardHandler = (req, res) => {
     boardId,
     // pull cardId from fromList
     {
-      $pull: { "lists.$[list].cards": ObjectId(cardId) }
+      $pull: { "lists.$[list].cards": new ObjectId(cardId) }
     },
     {
-      arrayFilters: [{ "list._id": ObjectId(fromList) }]
+      arrayFilters: [{ "list._id": new ObjectId(fromList) }]
     }
   ).exec();
   const pushPromise = Board.findByIdAndUpdate(
@@ -108,13 +108,13 @@ const moveCardHandler = (req, res) => {
     {
       $push: {
         "lists.$[list].cards": {
-          $each: [ObjectId(cardId)],
+          $each: [new ObjectId(cardId)],
           $position: toIndex
         }
       }
     },
     {
-      arrayFilters: [{ "list._id": ObjectId(toList) }]
+      arrayFilters: [{ "list._id": new ObjectId(toList) }]
     }
   ).exec();
 
@@ -137,10 +137,10 @@ const deleteCardHandler = (req, res) => {
       ]
     },
     {
-      $pull: { "lists.$[list].cards": ObjectId(cardId) }
+      $pull: { "lists.$[list].cards": new ObjectId(cardId) }
     },
     {
-      arrayFilters: [{ "list._id": ObjectId(listId) }]
+      arrayFilters: [{ "list._id": new ObjectId(listId) }]
     }
   )
     .then(() => {
