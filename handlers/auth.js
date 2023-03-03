@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken"),
   User = require("../models/user"),
   CustomError = require("../middleware/error").CustomError,
   { validationResult } = require("express-validator"),
-  crypto = require("crypto"),
+  crypto = require("node:crypto"),
   dayjs = require("dayjs"),
   mailgun = require("mailgun-js")({
     apiKey: process.env.MAILGUN_API_KEY,
@@ -120,8 +120,8 @@ const forgotPassword = (req, res) => {
 
 const checkPasswordResetToken = (req, res) => {
   const { passwordResetToken } = req.params;
-  const cutoff = dayjs().add(20, 'minutes').toISOString();
-  User.findOne({ passwordResetToken: passwordResetToken }, { $lt: cutoff })
+  const now = dayjs().toISOString();
+  User.findOne({ passwordResetToken: passwordResetToken, passwordResetTokenValidUntil: { $gt: now } })
     .then((user) => {
       if (!user) {
         throw new CustomError(400, "Token expired");

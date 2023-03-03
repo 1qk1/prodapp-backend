@@ -12,16 +12,7 @@ const express = require("express"),
   errorMiddleware = require("./middleware/error").errorMiddleware,
   authStrategy = require("./passport");
 
-mongoose.connect(
-  process.env.MONGODB_URI,
-  (error) => {
-    if (!error) {
-      console.log("database connected");
-    } else {
-      console.log("database connection error:", error);
-    }
-  }
-);
+mongoose.connect(process.env.MONGODB_URI,);
 
 app.use(helmet());
 
