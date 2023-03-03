@@ -114,8 +114,9 @@ const forgotPassword = (req, res) => {
           });
         });
       });
+    } else {
+      throw new CustomError(400, "Email not found");
     }
-    throw new CustomError(400, "Email not found");
   }).catch(res.handleError);
 };
 
