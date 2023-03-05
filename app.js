@@ -1,18 +1,26 @@
 require("dotenv").config();
-const express = require("express"),
-  app = express(),
-  helmet = require("helmet"),
-  mongoose = require("mongoose"),
-  authRoutes = require("./routes/auth"),
-  pomodoroRoutes = require("./routes/pomodoro"),
-  boardRoutes = require("./routes/board"),
-  extensionRoutes = require("./routes/extensions"),
-  passport = require("passport"),
-  cors = require("cors"),
-  errorMiddleware = require("./middleware/error").errorMiddleware,
-  authStrategy = require("./passport");
+const express = require("express");
+const app = express();
+const helmet = require("helmet");
+const mongoose = require("mongoose");
+const authRoutes = require("./routes/auth");
+const pomodoroRoutes = require("./routes/pomodoro");
+const boardRoutes = require("./routes/board");
+const extensionRoutes = require("./routes/extensions");
+const passport = require("passport");
+const cors = require("cors");
+const errorMiddleware = require("./middleware/error").errorMiddleware;
+const authStrategy = require("./passport");
+const Sentry = require("@sentry/node");
+
+Sentry.init({
+  dsn: process.env.SENTRY_DSN,
+  tracesSampleRate: 1.0,
+});
 
 mongoose.connect(process.env.MONGODB_URI,);
+
+app.use(Sentry.Handlers.requestHandler());
 
 app.use(helmet());
 
@@ -31,13 +39,14 @@ app.use(passport.initialize());
 
 passport.use(authStrategy);
 
-app.use(errorMiddleware);
-
 app.use("/api/auth", authRoutes);
 app.use("/api/pomodoro", pomodoroRoutes);
 app.use("/api/boards", boardRoutes);
 app.use("/api/extensions", extensionRoutes);
 
+app.use(Sentry.Handlers.errorHandler());
+
+app.use(errorMiddleware);
 const port = process.env.PORT || 3001;
 
 app.listen(port, () => {
