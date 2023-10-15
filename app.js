@@ -4,6 +4,7 @@ const app = express();
 const helmet = require("helmet");
 const mongoose = require("mongoose");
 const authRoutes = require("./routes/auth");
+const userRoutes = require("./routes/user");
 const pomodoroRoutes = require("./routes/pomodoro");
 const boardRoutes = require("./routes/board");
 const extensionRoutes = require("./routes/extensions");
@@ -39,14 +40,16 @@ app.use(passport.initialize());
 
 passport.use(authStrategy);
 
+app.use(errorMiddleware);
+
 app.use("/api/auth", authRoutes);
+app.use("/api/user", userRoutes);
 app.use("/api/pomodoro", pomodoroRoutes);
 app.use("/api/boards", boardRoutes);
 app.use("/api/extensions", extensionRoutes);
 
 app.use(Sentry.Handlers.errorHandler());
 
-app.use(errorMiddleware);
 const port = process.env.PORT || 3001;
 
 app.listen(port, () => {
