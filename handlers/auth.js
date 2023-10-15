@@ -36,6 +36,8 @@ const sendUserJSON = (req, res) => {
           username: user.username,
           id: user._id,
           extensions: user.extensions,
+          email: user.email,
+          extensionSettings: user.extensionSettings,
         };
         res.json({ user: userJSON });
       } else {
@@ -97,15 +99,16 @@ const forgotPassword = (req, res) => {
         user.save().then((user) => {
           // will send email with the reset password link
           // will return success or fail
+          const baseURL = process.env.NODE_ENV === "production" ? "https://prodapp.xyz" : "http://localhost:3000";
           var emailData = {
             from: "Prodapp Support <noreply@prodapp.xyz>",
             to: userEmail,
             subject: "Password reset request",
             text: [
-              "Hello,",
+              `Hello ${user.username},`,
               "This email is sent because you requested a password change",
               "To change your password follow this link",
-              "https://prodapp.xyz/reset-password/" + token,
+              `${baseURL}/reset-password/` + token,
               "Keep in mind this link is valid for 20 minutes, after that you will need to request a new recovery again",
             ],
           };

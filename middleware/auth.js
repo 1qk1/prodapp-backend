@@ -74,12 +74,12 @@ const resetPasswordValidations = [
   body("password", "Password should be more than 5 characters long.").isLength({
     min: 5,
   }),
-  body("password", "Passwords don't match.").custom((value,{req, loc, path}) => {
+  body("password", "Passwords don't match.").custom((value, { req, loc, path }) => {
     if (value !== req.body.confirmPassword) {
-        // trow error if passwords do not match
-        throw new Error("Passwords don't match XDDD.");
+      // trow error if passwords do not match
+      throw new Error("Passwords don't match XDDD.");
     } else {
-        return value;
+      return value;
     }
   }),
 ];

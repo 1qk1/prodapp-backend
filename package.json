@@ -8,25 +8,25 @@
   },
   "author": "",
   "dependencies": {
-    "@sentry/node": "^7.40.0",
-    "bcrypt": "^5.1.0",
+    "@sentry/node": "^7.74.0",
+    "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
-    "dayjs": "^1.11.7",
-    "dotenv": "^16.0.3",
+    "dayjs": "^1.11.10",
+    "dotenv": "^16.3.1",
     "express": "^4.18.2",
-    "express-validator": "^6.15.0",
-    "helmet": "^6.0.1",
-    "jsonwebtoken": "^9.0.0",
+    "express-validator": "^7.0.1",
+    "helmet": "^7.0.0",
+    "jsonwebtoken": "^9.0.2",
     "mailgun-js": "^0.22.0",
-    "mongoose": "^7.0.0",
+    "mongoose": "^7.6.2",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0"
   },
   "engines": {
-    "node": "16"
+    "node": "18"
   },
   "devDependencies": {
-    "nodemon": "^2.0.21"
+    "nodemon": "^3.0.1"
   }
 }

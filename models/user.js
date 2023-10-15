@@ -31,6 +31,26 @@ const userSchema = new mongoose.Schema({
       },
     ],
   },
+  extensionSettings: {
+    pomodoro: {
+      time: {
+        type: Number,
+        default: 25,
+      },
+      break: {
+        type: Number,
+        default: 5,
+      },
+      longBreak: {
+        type: Number,
+        default: 15,
+      },
+      longBreakInterval: {
+        type: Number,
+        default: 4,
+      },
+    },
+  },
   passwordResetToken: {
     type: String,
   },
