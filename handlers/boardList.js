@@ -47,7 +47,7 @@ const changeListTitle = (req, res) => {
     {
       // don't use deprecated function
       new: true,
-      arrayFilters: [{ "list._id": ObjectId(req.body.listId) }]
+      arrayFilters: [{ "list._id": new ObjectId(req.body.listId) }]
     }
   )
     .lean()
